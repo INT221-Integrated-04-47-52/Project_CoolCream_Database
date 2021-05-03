@@ -1,0 +1,39 @@
+** to start a new Docker container for the MySQL Community Server **
+docker run --name=coolcream1 --restart on-failure -d mysql/mysql-server
+
+** ดู container ที่ run อยู่ **
+docker ps 
+CONTAINER ID   IMAGE                COMMAND                  CREATED          STATUS                    PORTS                       NAMES
+fc67f2e2b0d7   mysql/mysql-server   "/entrypoint.sh mysq…"   20 minutes ago   Up 20 minutes (healthy)   3306/tcp, 33060-33061/tcp   coolcream1
+
+** ดู log จะมี passwordที่ generated มาให้ เอาไว้ reset password เฉยๆ **
+docker logs coolcream1
+[Entrypoint] GENERATED ROOT PASSWORD: ,ELaseHuSOryfyK0h@LYJaGOrroJ
+
+** เปิด mySql บน docker **
+docker exec -it coolcream1 mysql -uroot -p
+
+** reset password **
+mysql> ALTER USER 'root'@'localhost' IDENTIFIED BY 'cool044752';
+
+** สามารถ ทำอะไรกับ MySQL Container ได้บ้าง **
+docker start coolcream1
+docker restart coolcream1
+docker stop coolcream1
+docker rm coolcream1
+
+docker run --name=sever2 --env MYSQL_ROOT_PASSWORD=Coolcream044752  -d -p 3306:3306 mysql:8.0.23
+docker run --name=phpmyadmin --link sever2:db -d -p 8080:80   phpmyadmin
+
+docker run --name=[ตั้งไรก็ตั้งเถอะ] --env MYSQL_ROOT_PASSWORD=[รหัส]  -d -p 3306:3306 mysql:8.0.23
+docker run --name=[ชื่อไรก็ได้] --link [ชื่อของ"ตั้งไรก็ตั้งเถอะ"]:db -d -p [Portsever]:[Portcontainer]   phpmyadmin
+ 
+เข้า home>[sever]>setting>networking 
+add Port เพื่อให้คนอื่นเข้าถึงได้ ทั้ง 2 port
+
+** phpmyadmin , MySql woekbench **
+username = root
+password = [รหัส]
+
+url = [Public IP Address]:[Portsever] ของ phpmyadmin
+
